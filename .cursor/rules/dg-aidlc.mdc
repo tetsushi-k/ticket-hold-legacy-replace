@@ -32,8 +32,9 @@ alwaysApply: true
 | 2 | `aidlc-docs/domain/domain-modeling-questions.md` | `domain/*.md` |
 | 3 | `aidlc-docs/construction/acceptance-criteria-questions.md` | `acceptance-criteria.md` |
 
-- 書式の骨格は `.aidlc-rule-details/common/question-format-guide.md` に従う（`A) B) … X) Other` + `[Answer]:`）
+- 書式の骨格は `.aidlc-rule-details/common/question-format-guide.md` に従う（`A) B) … X) その他` + `[Answer]:`）
 - **質問の正本はファイル。** チャットや AskQuestion は補助。最終回答は必ず `[Answer]:` に残す
+- **答え方**: 選択肢どおりなら `[Answer]: A`。A/B に無いときは `[Answer]: X` のあとに希望内容を書く。英語の `Other (please describe…)` は使わず、日本語の「その他」にする（現場役が読めること）
 - 各問に **想定回答者**（開発者 / 現場役 など）を必ず書く（ポートフォリオでは現場役＝作者でも可）
 - フェーズ末: 全問 Answer 済み → ドキュメント反映 → 明示承認（「Step N 承認」）まで次 Step に進まない
 - `decision-log.md` は要約。**選択肢の正本は questions ファイル**

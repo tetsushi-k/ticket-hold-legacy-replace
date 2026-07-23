@@ -6,6 +6,8 @@ Intent（Step 1）承認後・Reverse Engineering 済みのうえで本ファイ
 
 空欄の `[Answer]:` を埋めたら、チャットで「Step 2 の Answer を埋めた」／「Step 2 OK」と伝えてください。
 
+**答え方**: `[Answer]:` のあとに回答を書く（例: `A`）。A/B に無いときだけ `X` とし、続けて希望内容を書く。
+
 ---
 
 ## Question 1
@@ -13,7 +15,7 @@ Intent（Step 1）承認後・Reverse Engineering 済みのうえで本ファイ
 
 A) **公演の中の 1 席**をまとまりにする（その席の仮押さえ／本確定／空席をここで守る）
 B) **仮押さえ 1 件**をまとまりにし、席マスタは別扱い
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者 + 現場役
 
@@ -26,7 +28,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) **空席 / 仮押さえ中 / 本確定** のどれか 1 つ（仮押さえ中だけ期限と購入者を持つ）
 B) フラグを複数立てる（例: held と confirmed が同時に true になりうる）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者 + 現場役
 
@@ -39,7 +41,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) ドメインの中（期限前かつ仮押さえ中なら有効、など）。ユースケースや SQL に散らさない
 B) 各ユースケースや SQL の WHERE に書く
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者
 
@@ -52,7 +54,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) 古い仮押さえは無効とみなし、同じまとまりの中で新しい仮押さえに差し替える（空席扱いにしてから確保）
 B) エラーにして、先に「期限切れ解放」ユースケースを必ず走らせる
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者（Intent Q6=A と整合）
 
@@ -65,7 +67,7 @@ DB 側の「二重を防ぐ備え」は、どのイメージにしますか？�
 
 A) **有効な確保だけ**が一意になるようにする（例: 有効行用の一意制約や同等の仕組み）
 B) 席行そのものの UPDATE 競合だけに任せ、追加の一意制約は置かない
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者（Intent Q7=A）
 
@@ -78,7 +80,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) 分ける。空き確認は DB に書かない。判定ルールは仮押さえと同じ「有効確保が無いか」
 B) 同じ処理にまとめる（確認のついでに書くこともある）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者（Intent Q8=A）
 
@@ -91,7 +93,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) よい（`domain/` 文書に反映したうえで閉じる）
 B) まだ（直したい点を Other に書く）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役 + 開発者
 

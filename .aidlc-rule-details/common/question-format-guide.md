@@ -25,13 +25,19 @@ Every question must include meaningful options plus "Other" as the last option:
 A) [First meaningful option]
 B) [Second meaningful option]
 [...additional options as needed...]
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 [Answer]: 
 ```
 
+**DG-AIDLC（日本語作品）**: 上の日本語 `X)` を使う。英語の `X) Other (please describe after [Answer]: tag below)` と同じ意味（「A/B に無いときは X を選び、[Answer]: の行に内容を追記する」）。現場役向けに英語のまま残さない。
+
+**答え方の例**:
+- 選択肢どおり → `[Answer]: A`
+- その他 → `[Answer]: X 会場全体の座席番号だけで見る`
+
 **CRITICAL**: 
-- "Other" is MANDATORY as the LAST option for every question
+- "Other" /「その他」is MANDATORY as the LAST option for every question
 - Only include meaningful options - don't make up options to fill slots
 - Use as many or as few options as make sense (minimum 2 + Other)
 

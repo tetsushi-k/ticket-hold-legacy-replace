@@ -3,7 +3,7 @@
 このファイルが **Step 1 の決めごとの正本**です。チャットだけで決めません。  
 空欄の `[Answer]:` を埋めたら、チャットで「Step 1 の Answer を埋めた」と伝えてください。
 
-**答え方**: 選択肢の手紙（例: `B`）。その他のときは `X` のあとに説明。
+**答え方**: `[Answer]:` のあとに回答を書く（例: `B`）。A/B に無いときだけ `X` とし、続けて希望内容を書く。
 
 問の書き方ルール（現場役が読めること）: リポの `.cursor/rules/dg-aidlc.mdc`「質問文は現場役が読めること」
 
@@ -14,7 +14,7 @@
 
 A) 公演（1 つのイベント）の中の、1 つの座席番号だけを見る
 B) 会場全体で座席番号だけを見る（どの公演かは見ない）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役（チケット窓口）+ 開発者
 
@@ -28,7 +28,7 @@ X) Other (please describe after [Answer]: tag below)
 A) 10 分
 B) 15 分
 C) 30 分
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役 + 開発者
 
@@ -41,7 +41,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) すぐ空席に戻す（誰でも新たに仮押さえできる）。期限切れの仮押さえから本確定はできない
 B) しばらく「期限切れ」のまま残し、人が解放操作するまで空席にしない
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役
 
@@ -54,7 +54,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) 有効期限内の仮押さえがあり、その仮押さえをした本人（購入者 ID）からだけ本確定できる
 B) 有効な仮押さえがあれば、誰からでも本確定できる（購入者の一致は見ない）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役 + 開発者
 
@@ -67,7 +67,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) 同じ公演の同じ席に、有効な仮押さえまたは本確定がすでにあったら、新しい仮押さえも本確定も拒否する
 B) 本確定同士だけ拒否する。仮押さえ同士は一時的に重なってよい
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役
 
@@ -80,7 +80,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) 受けない見た目にせず、**期限を過ぎていれば空席扱い**して新しい仮押さえを受け付ける（必要なら古い行を解放する）
 B) 期限切れ行が残っているあいだは常に拒否する（必ず解放処理を先に走らせる）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者 + 現場役
 
@@ -93,7 +93,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) アプリの判定に加え、データベース側でも二重を防ぐ備えを置く（例: 有効確保の一意制約）
 B) アプリの判定だけにする（データベース側の二重防止は今回置かない）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者
 
@@ -106,7 +106,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) まだ仮押さえは作らない。判定のしかたは、実際に仮押さえするときと同じ（有効な仮押さえ／本確定が無ければ空き）
 B) 確認の時点で仮押さえなど、何かしら書き込む
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役 + 開発者
 
@@ -119,7 +119,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) しない。本確定は人が明示したときだけ。あいまいな状態では仮押さえのままか、拒否する（安全側）
 B) 一定条件で自動本確定してよい（条件を Other に書く）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役 + 開発者
 
@@ -132,7 +132,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) 購入者番号（ID）だけ残す（会員マスタは作らない）
 B) 氏名などの表示用文字列だけ残す
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者
 
@@ -145,7 +145,7 @@ After（刷新後）の主構成はどれにしますか？
 
 A) 素の PHP 8.3 + Domain / Application / Infrastructure（FW は最小。境界は Deptrac 等で証明）
 B) Laravel + Domain / Application / Infrastructure（`adapters/laravel.md` 準拠）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 開発者
 
@@ -158,7 +158,7 @@ X) Other (please describe after [Answer]: tag below)
 
 A) よい（残りの Answer も文書に反映したうえで閉じる）
 B) まだ（直したい点を Other に書く）
-X) Other (please describe after [Answer]: tag below)
+X) その他（下の [Answer]: のあとに希望内容を書く）
 
 想定回答者: 現場役 + 開発者
 
