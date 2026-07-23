@@ -1,0 +1,84 @@
+---
+description: "DG-AIDLC (Domain-Guarded AI-DLC) - AI-DLC に DDD の業務境界と TDD の品質ガードを足した開発型のガード規約"
+alwaysApply: true
+---
+
+# DG-AIDLC ガード規約（Domain-Guarded AI-DLC）
+
+このリポジトリは AI-DLC を土台に、**DDD（業務境界）と TDD（品質ガード）で AI の実装を枠に閉じ込める**開発型「DG-AIDLC」で作る。
+`ai-dlc-workflow.mdc` の工程に従いつつ、本ファイルの制約を上乗せする。制約は努力目標ではなくハードルール。
+
+## 型の 7 ステップ
+
+1. Intent & 境界宣言 … `aidlc-docs/inception/intent.md`, `ubiquitous-language.md`
+2. ドメインモデリング（核心判断は人間が確定）… `aidlc-docs/domain/` 配下の集約・境界ドキュメント
+3. 受入例示 … `aidlc-docs/construction/acceptance-criteria.md`
+4. Red（失敗するテスト）… 作品リポの Unit / Feature（または同等）テスト配置
+5. Green（最小実装）… `Domain` / `Application`（または UseCase）/ `Infrastructure` など合意したレイヤ
+6. Refactor & 境界検証 … 依存境界・静的解析ツールをグリーンにする（言語・FW に応じて選定）
+7. ナラティブ化 … `aidlc-docs/decision-log.md`, `README.md`
+
+## ドメイン承認ゲート（Step 1–3・ハードルール）
+
+素の AI-DLC の質問・承認儀式を、**DDD の核心判断にもそのまま適用する**。チャットや UI の選択肢だけで確定したことにしない。
+
+### 質問ファイル（フェーズごと・推奨かつ必須）
+
+1 ファイルに全ステップを詰め込まない。ゲートごとに分ける。
+
+| Step | 質問ファイル（正本） | 草案ドキュメント |
+|------|----------------------|------------------|
+| 1 | `aidlc-docs/inception/intent-approval-questions.md` | `intent.md`, `ubiquitous-language.md` |
+| 2 | `aidlc-docs/domain/domain-modeling-questions.md` | `domain/*.md` |
+| 3 | `aidlc-docs/construction/acceptance-criteria-questions.md` | `acceptance-criteria.md` |
+
+- 書式の骨格は `.aidlc-rule-details/common/question-format-guide.md` に従う（`A) B) … X) Other` + `[Answer]:`）
+- **質問の正本はファイル。** チャットや AskQuestion は補助。最終回答は必ず `[Answer]:` に残す
+- 各問に **想定回答者**（開発者 / 現場役 など）を必ず書く（ポートフォリオでは現場役＝作者でも可）
+- フェーズ末: 全問 Answer 済み → ドキュメント反映 → 明示承認（「Step N 承認」）まで次 Step に進まない
+- `decision-log.md` は要約。**選択肢の正本は questions ファイル**
+
+### 質問文は現場役が読めること（DG 上乗せ・AI-DLC 本体には無い）
+
+素の AI-DLC の question-format-guide は開発者向けの明瞭さを前提にしており、**業務当事者（現場役）が読めることまでは強制しない**。DG-AIDLC ではドメイン核心を現場とすり合わせるため、次をハードルールとする。
+
+- **想定回答者に「現場役」が含まれる問**は、専門用語・FW 語・英語略語だけで聞かない
+- 先に **業務のことば** で聞き、必要なときだけ括弧で技術語を添える  
+  （例: ❌「副作用なしの Query」→ ✅「まだ予約は作らず、空きだけ確認する」）
+- 一文に条件を詰め込みすぎない。迷うなら問を分割する
+- **想定回答者が開発者のみ**の問は技術語を使ってよいが、現場役向けの問と混ぜて煙に巻かない
+- エージェントがわかりにくい問を出したときは、Answer 前に文面を直してから再提示する
+
+### Red 着手条件
+
+Step 1–3 の questions がすべて Answer 済みで、人間が各 Step を明示承認したあとでなければ Red（テスト実装）に入らない。
+
+## 横展開で変えない約束（型の核心）
+
+1. **ドメインの核心判断は人間が確定する**（AI は草案まで）。ユビキタス言語・不変条件・境界の最終決定を AI に丸投げしない。
+2. **受入例示はテストと 1 対 1 対応**させる（`acceptance-criteria.md` の行 = テストの dataset / ケース行）。
+3. **不確実な自動確定はしない**（安全側。取り返しのつかない副作用より、人間確認や検出漏れ許容を優先する方針を Intent で明示する）。
+4. **照会（副作用なし）とコマンド（副作用あり）を分離する**。同じユースケースに混ぜない。
+5. **境界違反はツールで証明する**。口頭の主張で代替しない（例: アーキテクチャテスト、依存ルール、静的解析）。
+
+## レイヤ境界（機械強制の対象）
+
+- **Domain はフレームワーク・ORM・HTTP に依存しない**（純ドメインとしてテスト可能にする）。
+- 依存方向は `Presentation（Http/Console 等） → Application → Domain`、`Infrastructure → Domain`。逆流禁止。
+- 永続化の **interface（ポート）は Domain（または Application の読取ポート）**、実装は `Infrastructure`（依存性逆転）。
+- 集約間は **ID（値オブジェクト）参照**。他集約のオブジェクトを直接保持しない。
+
+言語・FW 固有のパッケージ名やツール名は作品リポの `adapters` メモまたは README に書く。本規約は置き場の原則だけを固定する。
+
+## Never Vibe Code
+
+- 実装の前に必ず「落ちるテスト（Red）」を先に書く。テストなしで振る舞いを足さない。
+- 設計判断が変わるときは、コードと `aidlc-docs/` を**同時に**更新する。
+- 各ステップ末に `aidlc-docs/decision-log.md` へ「AI に任せた / 自分が判断・修正した / 重かった点」を 1〜3 行残す。
+- 核心の選択肢変更時は、該当 `*-questions.md` の Answer も更新する（decision-log だけ書き換えない）。
+
+## 実行・成果物の置き方
+
+- ビルド・テスト・解析の実行手段は作品リポで決める（Makefile、タスクランナー、CI 等）。代表コマンドを1か所に集約する。
+- 環境固有の使い捨てスクリプトはコミットしない。
+- アプリケーションコードはワークスペース根（または合意した `src/` 等）。設計・判断の記録は `aidlc-docs/` のみ。
