@@ -2,7 +2,7 @@
 
 興行チケットの **仮押さえ → 本確定／期限切れ解放** と **二重確保拒否** を、意図的レガシーから DG-AIDLC でドメイン抽出する Brownfield 作品。
 
-Greenfield の対照は [salon-booking-ddd](https://github.com/tetsushi-k/salon-booking-ddd)。手法キットは [dg-aidlc](https://github.com/tetsushi-k/dg-aidlc)。本作は **別ドメインで型が横展開できること** の証明。主役は [`aidlc-docs/`](aidlc-docs/README.md)。
+Greenfield の対照は [salon-booking-ddd](https://github.com/tetsushi-k/salon-booking-ddd)。手法キットは [dg-aidlc](https://github.com/tetsushi-k/dg-aidlc)。本作は **別ドメインで型が横展開できること** の証明。主役は [`aidlc-docs/`](aidlc-docs/README.md)。プロフィール全体は [tetsushi-k](https://github.com/tetsushi-k)。
 
 > 設計判断の詳細・承認ゲートは [`aidlc-docs/`](aidlc-docs/README.md) を参照。
 
