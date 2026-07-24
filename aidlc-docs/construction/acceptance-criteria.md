@@ -1,6 +1,6 @@
-# 受入例示（Step 3・草案）
+# 受入例示（Step 3）
 
-> **状態: Step 3 未承認** — 正本は `acceptance-criteria-questions.md`  
+> **状態: Step 3 承認済み（2026-07-24 10:55 JST）** — 正本は `acceptance-criteria-questions.md`  
 > **原則: 下表の 1 行 = テストの 1 ケース（dataset 行）**
 
 質問ファイルで言う「受入ケース表」＝このファイル内の **H / C / R / Q** の4表（H1〜Q4）。
@@ -15,7 +15,21 @@
 - 空き確認 Query: 副作用なし。判定は hold と同じ
 - 自動 confirm しない
 - タイムゾーン: Asia/Tokyo
-- 表記: 断りなき公演は `P1`、席は `A-1` など
+
+## ケース表で使うテストデータ
+
+ケース表の Given / When に出る識別子の一覧。ここに無い値は、そのケースの行にだけ追加で書いてよい。
+
+| 名前 | 値 | 用途 |
+|------|-----|------|
+| 公演 P1 | `PerformanceId = P1` | 省略時の公演（C / R / Q 含む） |
+| 公演 P2 | `PerformanceId = P2` | H5（別公演） |
+| 席 A-1 | `SeatNo = A-1` | 省略時の席 |
+| 購入者 buyer-a | `BuyerId = buyer-a` | 先に仮押さえする側・本人の confirm |
+| 購入者 buyer-b | `BuyerId = buyer-b` | 二重確保・別人の confirm |
+| 有効な期限 | `holdUntil` が基準時刻より後 | 表の「有効」な OnHold |
+| 期限切れ | `holdUntil` が基準時刻より前 | 表の「期限切れ」な OnHold |
+| Hold TTL | 15 分 | 新規 hold 成功時の期限の長さ |
 
 ## 受入ケース表
 
@@ -56,7 +70,7 @@
 | Q3 | 期限切れ hold は空きあり | OnHold(期限切れ) | 空き確認 | 空きあり。状態不変 | 空席扱い（書かない） |
 | Q4 | Confirmed は空きなし | Confirmed | 空き確認 | 空きなし。状態不変 | |
 
-## シードでデモするシナリオ（make setup 直後・案）
+## シードでデモするシナリオ（make setup 直後）
 
 1. P1 に空席数席 + 必要なら期限切れ hold 用の仕込み
 2. **成功**: 空席 hold → 本人 confirm

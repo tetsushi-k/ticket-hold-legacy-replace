@@ -34,7 +34,7 @@ X) その他（下の [Answer]: のあとに希望内容を書く）
 
 **答え方の例**:
 - 選択肢どおり → `[Answer]: A`
-- その他 → `[Answer]: X 会場全体の座席番号だけで見る`
+- その他 → `[Answer]: X 別の単位で数えたい`
 
 **CRITICAL**: 
 - "Other" /「その他」is MANDATORY as the LAST option for every question

@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Construction 手前 — Step 1–2 **承認済み** / Step 3 questions **未回答**
+Construction — Step 1–3 **承認済み** / 次は **Red**（失敗するテスト）
 
 ## Project Type
 
@@ -16,5 +16,6 @@ Brownfield（意図的レガシー → 仕様復元 → ドメイン抽出）
 
 - Step 1 承認: 2026-07-23 22:42 JST
 - Step 2 承認: 2026-07-23 22:51 JST
+- Step 3 承認: 2026-07-24 10:55 JST
 - After: 素の PHP 8.3 + Domain/Application/Infrastructure + Deptrac
-- Red 着手条件: Step 3 明示承認後
+- 次: `acceptance-criteria.md` の H/C/R/Q どおりに失敗するテストを先に書く

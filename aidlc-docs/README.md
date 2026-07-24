@@ -24,17 +24,17 @@
 - チャットは「Answer を埋めた／承認する」の合図用。選択肢の正本はファイル
 - `decision-log.md` は要約。Red は Step 1–3 の明示承認後
 
-## 現状（2026-07-23）
+## 現状（2026-07-24）
 
 | 文書 | 状態 |
 |------|------|
 | キット配置 | **済** |
-| Step 1 Intent | **承認済み**（22:42 JST） |
+| Step 1 Intent | **承認済み**（2026-07-23 22:42 JST） |
 | レガシー Before（`legacy/`） | **動作確認済** |
 | Reverse Engineering | **済**（`spec-restored` / `anti-patterns` / `architecture`） |
-| Step 2 ドメイン | **承認済み**（22:51 JST） |
-| Step 3 受入例示 | **questions 提示（未承認）** |
-| After / Red–Green | **未着手**（Step 3 承認後） |
+| Step 2 ドメイン | **承認済み**（2026-07-23 22:51 JST） |
+| Step 3 受入例示 | **承認済み**（2026-07-24 10:55 JST） |
+| After / Red–Green | **次は Red**（受入ケース表どおりの失敗テスト） |
 
 ## A 作品との役割分担
 
