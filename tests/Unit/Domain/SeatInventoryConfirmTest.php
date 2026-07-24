@@ -9,6 +9,7 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use TicketHold\Domain\BuyerId;
 use TicketHold\Domain\PerformanceId;
+use TicketHold\Domain\RejectionReason;
 use TicketHold\Domain\SeatInventory;
 use TicketHold\Domain\SeatNo;
 
@@ -57,6 +58,7 @@ final class SeatInventoryConfirmTest extends TestCase
         $result = $seat->confirm($this->buyerB, $this->now);
 
         $this->assertFalse($result->isOk());
+        $this->assertSame(RejectionReason::NotOwner, $result->rejectionReason());
         $this->assertSame($before, $seat->snapshot());
     }
 
@@ -70,6 +72,7 @@ final class SeatInventoryConfirmTest extends TestCase
         $result = $seat->confirm($this->buyerA, $this->now);
 
         $this->assertFalse($result->isOk());
+        $this->assertSame(RejectionReason::HoldExpired, $result->rejectionReason());
         $this->assertSame($before, $seat->snapshot());
     }
 
@@ -82,6 +85,7 @@ final class SeatInventoryConfirmTest extends TestCase
         $result = $seat->confirm($this->buyerA, $this->now);
 
         $this->assertFalse($result->isOk());
+        $this->assertSame(RejectionReason::NoHold, $result->rejectionReason());
         $this->assertSame($before, $seat->snapshot());
     }
 
@@ -94,6 +98,7 @@ final class SeatInventoryConfirmTest extends TestCase
         $result = $seat->confirm($this->buyerA, $this->now);
 
         $this->assertFalse($result->isOk());
+        $this->assertSame(RejectionReason::AlreadyConfirmed, $result->rejectionReason());
         $this->assertSame($before, $seat->snapshot());
     }
 }

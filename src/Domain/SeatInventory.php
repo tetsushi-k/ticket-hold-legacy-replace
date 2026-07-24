@@ -103,7 +103,7 @@ final class SeatInventory
     public function hold(BuyerId $buyerId, \DateTimeImmutable $now): OperationResult
     {
         if ($this->hasEffectiveReservation($now)) {
-            return OperationResult::rejected();
+            return OperationResult::rejected(RejectionReason::DoubleBooking);
         }
 
         $this->state = SeatReservationState::OnHold;
@@ -115,11 +115,17 @@ final class SeatInventory
 
     public function confirm(BuyerId $buyerId, \DateTimeImmutable $now): OperationResult
     {
-        if (!$this->hasValidHold($now)) {
-            return OperationResult::rejected();
+        if ($this->isConfirmed()) {
+            return OperationResult::rejected(RejectionReason::AlreadyConfirmed);
+        }
+        if ($this->isAvailableState()) {
+            return OperationResult::rejected(RejectionReason::NoHold);
+        }
+        if ($this->isOnHold() && !$this->hasValidHold($now)) {
+            return OperationResult::rejected(RejectionReason::HoldExpired);
         }
         if ($this->buyerId === null || !$this->buyerId->equals($buyerId)) {
-            return OperationResult::rejected();
+            return OperationResult::rejected(RejectionReason::NotOwner);
         }
 
         $this->state = SeatReservationState::Confirmed;
@@ -131,8 +137,14 @@ final class SeatInventory
 
     public function releaseExpired(\DateTimeImmutable $now): OperationResult
     {
-        if (!$this->isOnHold() || $this->hasValidHold($now)) {
-            return OperationResult::rejected();
+        if ($this->isConfirmed()) {
+            return OperationResult::rejected(RejectionReason::AlreadyConfirmed);
+        }
+        if (!$this->isOnHold()) {
+            return OperationResult::rejected(RejectionReason::NotOnHold);
+        }
+        if ($this->hasValidHold($now)) {
+            return OperationResult::rejected(RejectionReason::HoldNotExpired);
         }
 
         $this->state = SeatReservationState::Available;

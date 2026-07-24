@@ -4,7 +4,7 @@ help:
 	@echo ""
 	@echo "ticket-hold-legacy-replace"
 	@echo "=================================================="
-	@echo "  make setup            Docker 起動（レガシー Before）"
+	@echo "  make setup            Docker 起動 + composer install"
 	@echo "  make up               コンテナ起動"
 	@echo "  make down             停止"
 	@echo "  make reset-db         DB ボリューム削除して再 seed"
@@ -16,24 +16,26 @@ help:
 	@echo "  make deptrac          レイヤ境界検証"
 	@echo "  make check            test + phpstan + deptrac"
 	@echo ""
-	@echo "Legacy UI: http://localhost:8080/"
+	@echo "Before (legacy): http://localhost:8080/"
+	@echo "After:           http://localhost:8081/"
 	@echo ""
 
-setup: up
+setup: up composer-install
 	@echo ""
-	@echo "=== setup complete (legacy Before) ==="
-	@echo "Open http://localhost:8080/"
-	@echo "After: make composer-install && make check"
+	@echo "=== setup complete ==="
+	@echo "Before: http://localhost:8080/"
+	@echo "After:  http://localhost:8081/"
+	@echo "Quality: make check"
 
 up:
-	docker compose up -d --build db legacy
+	docker compose up -d --build db legacy after
 
 down:
 	docker compose down
 
 reset-db:
 	docker compose down -v
-	docker compose up -d --build db legacy
+	docker compose up -d --build db legacy after
 
 logs:
 	docker compose logs -f

@@ -9,6 +9,7 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use TicketHold\Domain\BuyerId;
 use TicketHold\Domain\PerformanceId;
+use TicketHold\Domain\RejectionReason;
 use TicketHold\Domain\SeatInventory;
 use TicketHold\Domain\SeatNo;
 
@@ -60,6 +61,7 @@ final class SeatInventoryHoldTest extends TestCase
         $result = $seat->hold($this->buyerB, $this->now);
 
         $this->assertFalse($result->isOk());
+        $this->assertSame(RejectionReason::DoubleBooking, $result->rejectionReason());
         $this->assertSame($before, $seat->snapshot());
     }
 
@@ -72,6 +74,7 @@ final class SeatInventoryHoldTest extends TestCase
         $result = $seat->hold($this->buyerB, $this->now);
 
         $this->assertFalse($result->isOk());
+        $this->assertSame(RejectionReason::DoubleBooking, $result->rejectionReason());
         $this->assertSame($before, $seat->snapshot());
     }
 

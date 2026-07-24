@@ -39,7 +39,25 @@ services:
       db:
         condition: service_healthy
 
-  # After: composer / phpunit（ホストに PHP が無くても make test 可能）
+  after:
+    build:
+      context: .
+      dockerfile: docker/after-php/Dockerfile
+    container_name: ticket_hold_after
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/app
+    environment:
+      DB_HOST: db
+      DB_NAME: ticket_hold
+      DB_USER: ticket_user
+      DB_PASS: ticket_password
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # composer / phpunit（ホストに PHP が無くても make test 可能）
   php:
     image: composer:2
     working_dir: /app
