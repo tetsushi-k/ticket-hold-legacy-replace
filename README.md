@@ -2,7 +2,7 @@
 
 興行チケットの **仮押さえ → 本確定／期限切れ解放** と **二重確保拒否** を、意図的レガシーから DG-AIDLC でドメイン抽出する Brownfield 作品。
 
-Greenfield の対照は [`salon-booking-ddd`](../salon-booking-ddd)。本作は **別ドメインで型が横展開できること** の証明。主役は [`aidlc-docs/`](aidlc-docs/README.md)。
+Greenfield の対照は [salon-booking-ddd](https://github.com/tetsushi-k/salon-booking-ddd)。手法キットは [dg-aidlc](https://github.com/tetsushi-k/dg-aidlc)。本作は **別ドメインで型が横展開できること** の証明。主役は [`aidlc-docs/`](aidlc-docs/README.md)。
 
 > 設計判断の詳細・承認ゲートは [`aidlc-docs/`](aidlc-docs/README.md) を参照。
 
@@ -11,12 +11,12 @@ Greenfield の対照は [`salon-booking-ddd`](../salon-booking-ddd)。本作は 
 | フェーズ | パス | 状態（2026-07-24） |
 |----------|------|-------------------|
 | Before | `legacy/` | 動作確認済（意図的負債込み） |
-| After | `src/Domain/` + `tests/Unit/` | Domain Green + 境界検証済 |
-| プロセス | `aidlc-docs/` | Step 1–7 済（Domain 抽出区切り） |
+| After | `after/` + `src/` | 画面・永続化済（8081） |
+| プロセス | `aidlc-docs/` | Step 1–7 済 |
 
 スコープ（v1）: 仮押さえ作成 / 本確定 / 期限切れ解放 / 二重確保拒否。決済・会員・検索 UI 等は入れない。
 
-Application / Infrastructure / After デモ UI は Intent Done の残り（[`decision-log.md`](aidlc-docs/decision-log.md) 参照）。
+Intent Done の残り: 同時書き込み Feature（DB 防衛）。詳細は [`decision-log.md`](aidlc-docs/decision-log.md)。
 
 ## ② 使用技術（現状）
 
@@ -30,7 +30,7 @@ Application / Infrastructure / After デモ UI は Intent Done の残り（[`dec
 
 ## ③ アーキテクチャ
 
-Before は画面ごと PHP。After は Domain / Application / Infrastructure へ抽出する（**Domain と品質ゲートまで完了**）。
+Before は画面ごと PHP。After は Domain / Application / Infrastructure + 薄い PHP 画面（**8081**）。
 
 ```mermaid
 flowchart LR
@@ -60,14 +60,10 @@ flowchart LR
 make setup
 ```
 
-Legacy UI: http://localhost:8080/
+- Before: http://localhost:8080/
+- After: http://localhost:8081/
 
-After（品質ゲート）:
-
-```bash
-make composer-install
-make check    # test + phpstan + deptrac
-```
+既存 DB ボリュームがある場合は `make reset-db` で After 用テーブルを含めて再 seed する。
 
 ## ⑥ 動作確認
 
@@ -78,13 +74,15 @@ make check    # test + phpstan + deptrac
 3. 別購入者の「仮押さえ(B)」を同じ席に重ねると上書きできる（意図的穴 D5）
 4. 「期限切れ解放を実行」で期限超過の hold を `free` に戻せる
 
-### After（Domain）
+### After（`after/`）
 
-`make check` で以下を一括確認:
+1. A-1 で「仮押さえ(A)」→ `on_hold` / buyer-a / hold_until が入る
+2. 同じ席で「仮押さえ(B)」→ **拒否**（理由: 二重確保）
+3. A-3（期限切れ hold のシード）→ 空き確認は **空きあり**（状態は `on_hold` のまま）
+4. 「期限切れ解放を実行」→ A-3 が `available` に戻る
+5. 本人「本確定(A)」→ `confirmed`。別人は拒否
 
-- PHPUnit 17 件（受入 H/C/R/Q）
-- PHPStan level 6（`src/`）
-- Deptrac violations 0
+品質ゲート: `make check`（test + phpstan + deptrac）
 
 ## ⑦ ディレクトリ構成
 
@@ -92,7 +90,10 @@ make check    # test + phpstan + deptrac
 ticket-hold-legacy-replace/
 ├── aidlc-docs/           # 設計・判断・受入（主役）
 ├── legacy/               # Before
-├── src/Domain/           # After ドメイン
+├── after/                # After 画面 + bootstrap（composition root）
+├── src/Domain/           # 集約・VO・port
+├── src/Application/      # UseCase
+├── src/Infrastructure/   # MySQL 永続化
 ├── tests/Unit/Domain/    # 受入 H/C/R/Q（1:1）
 ├── adapters/
 ├── Makefile
@@ -104,7 +105,6 @@ ticket-hold-legacy-replace/
 
 ## ⑧ 今後の拡張案
 
-- Application / Infrastructure / Seeder（`make setup` で After デモ）
 - 同時書き込み Feature（DB 防衛・Intent Q7）
 
 ## AI 駆動開発（事実）
