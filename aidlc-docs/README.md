@@ -34,7 +34,7 @@
 | Reverse Engineering | **済**（`spec-restored` / `anti-patterns` / `architecture`） |
 | Step 2 ドメイン | **承認済み**（2026-07-23 22:51 JST） |
 | Step 3 受入例示 | **承認済み**（2026-07-24 10:55 JST） |
-| After / Red–Green | **次は Red**（受入ケース表どおりの失敗テスト） |
+| After / Red–Green | **Red 済み**（17 ケース Unit）→ 次は Green |
 
 ## A 作品との役割分担
 

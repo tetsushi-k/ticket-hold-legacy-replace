@@ -1,0 +1,25 @@
+{
+    "name": "portfolio/ticket-hold-legacy-replace",
+    "description": "Brownfield: ticket hold domain extraction (DG-AIDLC)",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TicketHold\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TicketHold\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

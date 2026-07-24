@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Construction — Step 1–3 **承認済み** / 次は **Red**（失敗するテスト）
+Construction — Step 4 **Red**（失敗するテスト追加済み） / 次は **Green**
 
 ## Project Type
 
@@ -18,4 +18,5 @@ Brownfield（意図的レガシー → 仕様復元 → ドメイン抽出）
 - Step 2 承認: 2026-07-23 22:51 JST
 - Step 3 承認: 2026-07-24 10:55 JST
 - After: 素の PHP 8.3 + Domain/Application/Infrastructure + Deptrac
-- 次: `acceptance-criteria.md` の H/C/R/Q どおりに失敗するテストを先に書く
+- Red: H1–H5 / C1–C5 / R1–R3 / Q1–Q4 → `tests/Unit/Domain/`（SeatInventory の業務メソッドは未実装で落ちる）
+- 次: Green — `SeatInventory` の hold / confirm / releaseExpired / isAvailable を最小実装

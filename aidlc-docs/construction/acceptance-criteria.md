@@ -77,10 +77,9 @@
 3. **失敗**: 別人 hold 上書き／別人 confirm／本確定席への hold
 4. **期限**: 期限切れ hold の解放、または期限切れ上への新規 hold
 
-## テスト対応（予定）
+## テスト対応
 
-| 表 | テスト置き場（案） |
-|----|-------------------|
-| H / C / R | Domain Unit |
-| Q | Application または Domain（読取） |
-| 同時書き込みの DB 防衛 | Feature（Construction で詳細） |
+| 表 | テスト置き場 |
+|----|-------------|
+| H / C / R / Q | `tests/Unit/Domain/SeatInventory*Test.php`（1 ケース = 1 メソッド、名前に H1 等） |
+| 同時書き込みの DB 防衛 | Feature（Construction で詳細・未着手） |

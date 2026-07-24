@@ -39,5 +39,12 @@ services:
       db:
         condition: service_healthy
 
+  # After: composer / phpunit（ホストに PHP が無くても make test 可能）
+  php:
+    image: composer:2
+    working_dir: /app
+    volumes:
+      - .:/app
+
 volumes:
   db_data:

@@ -29,9 +29,9 @@
 
 ## Step 4–6: Red → Green → Refactor
 
-- **AI に任せた**:
-- **自分が判断**:
-- **重かった / 迷った**:
+- **AI に任せた**: composer / PHPUnit / Domain VO 骨格、H/C/R/Q の Unit テスト（Red）、`make test`（Docker composer）
+- **自分が判断**: （Green 前）
+- **重かった / 迷った**: —
 
 ## Step 7: ナラティブ
 
