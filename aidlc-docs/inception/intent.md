@@ -48,12 +48,16 @@
 
 ## 成功の定義（Done）
 
-1. Before（`legacy/`）と After が同一リポで比較できる
-2. スコープ4点が受入テストで証明できる（受入例示 1:1）
-3. `decision-log` に「AI 草案を人間が却下／修正した核心」が最低1件
-4. `make setup` で主要動作が再現できる
-5. README から起動・動作確認・設計の要点が読める
-6. Domain 境界違反を Deptrac（または同等）で証明できる
+| # | 条件 | 状態（2026-07-24・Domain 区切り） |
+|---|------|-----------------------------------|
+| 1 | Before（`legacy/`）と After が同一リポで比較できる | 一部（Domain のみ。Infra / Presentation 未） |
+| 2 | スコープ4点が受入テストで証明できる（受入例示 1:1） | **済**（Domain Unit 17） |
+| 3 | `decision-log` に「AI 草案を人間が却下／修正した核心」が最低1件 | **済**（Step 1 Laravel 却下） |
+| 4 | `make setup` で主要動作が再現できる | 一部（Before のみ） |
+| 5 | README から起動・動作確認・設計の要点が読める | **済** |
+| 6 | Domain 境界違反を Deptrac（または同等）で証明できる | **済** |
+
+詳細は [`decision-log.md`](../decision-log.md) Step 7。
 
 ## 技術スタック（承認済み）
 
@@ -61,7 +65,7 @@
 |----|--------|-------|
 | 言語 | PHP 8.3（手続き型・意図的負債） | PHP 8.3 |
 | 構成 | 画面ごと PHP + グローバル DB | Domain / Application / Infrastructure |
-| 境界証明 | なし | Deptrac + PHPStan（予定） |
+| 境界証明 | なし | Deptrac + PHPStan（`make check`・Domain 済） |
 | DB | MySQL 8（compose） | 同左 |
 | DX | Makefile + docker compose | 同左に統合 |
 

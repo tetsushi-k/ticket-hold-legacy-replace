@@ -11,10 +11,12 @@ Greenfield の対照は [`salon-booking-ddd`](../salon-booking-ddd)。本作は 
 | フェーズ | パス | 状態（2026-07-24） |
 |----------|------|-------------------|
 | Before | `legacy/` | 動作確認済（意図的負債込み） |
-| After | `src/Domain/` + `tests/Unit/` | **Red**（受入 17 ケース。業務メソッド未実装） |
-| プロセス | `aidlc-docs/` | Step 1–3 承認済 → Step 4 Red |
+| After | `src/Domain/` + `tests/Unit/` | Domain Green + 境界検証済 |
+| プロセス | `aidlc-docs/` | Step 1–7 済（Domain 抽出区切り） |
 
 スコープ（v1）: 仮押さえ作成 / 本確定 / 期限切れ解放 / 二重確保拒否。決済・会員・検索 UI 等は入れない。
+
+Application / Infrastructure / After デモ UI は Intent Done の残り（[`decision-log.md`](aidlc-docs/decision-log.md) 参照）。
 
 ## ② 使用技術（現状）
 
@@ -23,12 +25,12 @@ Greenfield の対照は [`salon-booking-ddd`](../salon-booking-ddd)。本作は 
 | Before | PHP 8.3 + mysqli + Apache（compose） |
 | After | PHP 8.3（素の PHP）+ PHPUnit 11 + Composer |
 | DB | MySQL 8 |
-| DX | Makefile + docker compose（`php` サービスで test） |
-| 境界検証 | Deptrac / PHPStan（Green 以降） |
+| DX | Makefile + docker compose（`php` サービスで test / analyse） |
+| 境界検証 | Deptrac 3 + PHPStan 2（`make check`） |
 
-## ③ アーキテクチャ（予定）
+## ③ アーキテクチャ
 
-Before は画面ごと PHP。After は Domain / Application / Infrastructure へ抽出する（いま Red は Domain Unit のみ）。
+Before は画面ごと PHP。After は Domain / Application / Infrastructure へ抽出する（**Domain と品質ゲートまで完了**）。
 
 ```mermaid
 flowchart LR
@@ -43,13 +45,14 @@ flowchart LR
   end
 ```
 
+レイヤ分離は Deptrac で逆流を検知する（Domain が Infrastructure を import しない等）。
+
 ## ④ 設計上の工夫
 
-- Brownfield: 意図的負債を `intentional-debt-plan.md` に計画してから `legacy/` に埋め、Reverse Engineering で復元する
-- Never Vibe Code: Step 1–3 の questions 承認後に Red（失敗テスト）→ Green
-- 受入例示とテストは 1:1（`acceptance-criteria.md` の H/C/R/Q = Unit メソッド）
-
-意図的負債の例（Before）: グローバル `$conn`、状態語のゆれ、期限チェックの抜け、仮押さえ同士の二重を許す穴。詳細は `aidlc-docs/inception/intentional-debt-plan.md`。
+- Brownfield: 意図的負債を計画 → `legacy/` → Reverse Engineering → ドメイン抽出
+- Never Vibe Code: Step 1–3 の questions 承認後に Red → Green
+- 受入例示 H/C/R/Q と Domain Unit が 1:1（17 ケース）
+- レガシー D5（仮押さえ上書き）等は Domain の二重拒否で解消方向（[`anti-patterns.md`](aidlc-docs/inception/reverse-engineering/anti-patterns.md)）
 
 ## ⑤ ローカル起動方法
 
@@ -59,19 +62,29 @@ make setup
 
 Legacy UI: http://localhost:8080/
 
-After テスト:
+After（品質ゲート）:
 
 ```bash
 make composer-install
-make test
+make check    # test + phpstan + deptrac
 ```
 
-## ⑥ 動作確認（Before）
+## ⑥ 動作確認
+
+### Before（`legacy/`）
 
 1. 空席で「仮押さえ(A)」→ status が `hold`、`hold_until` が入る
 2. 「本確定(A)」→ status が `OK`（レガシーのゆれた確定語）
 3. 別購入者の「仮押さえ(B)」を同じ席に重ねると上書きできる（意図的穴 D5）
 4. 「期限切れ解放を実行」で期限超過の hold を `free` に戻せる
+
+### After（Domain）
+
+`make check` で以下を一括確認:
+
+- PHPUnit 17 件（受入 H/C/R/Q）
+- PHPStan level 6（`src/`）
+- Deptrac violations 0
 
 ## ⑦ ディレクトリ構成
 
@@ -79,23 +92,25 @@ make test
 ticket-hold-legacy-replace/
 ├── aidlc-docs/           # 設計・判断・受入（主役）
 ├── legacy/               # Before
-├── src/Domain/           # After ドメイン（Red: 業務未実装）
-├── tests/Unit/Domain/    # 受入 H/C/R/Q の失敗テスト
-├── adapters/             # DG-AIDLC スタックメモ
-├── .cursor/rules/        # dg-aidlc / ai-dlc-workflow
-├── .aidlc-rule-details/
+├── src/Domain/           # After ドメイン
+├── tests/Unit/Domain/    # 受入 H/C/R/Q（1:1）
+├── adapters/
 ├── Makefile
+├── deptrac.yaml
+├── phpstan.neon
 ├── composer.json
 └── docker-compose.yml
 ```
 
 ## ⑧ 今後の拡張案
 
-- Green → Application / Infrastructure → Deptrac
-- 同時リクエストの明示デモ用シナリオ
+- Application / Infrastructure / Seeder（`make setup` で After デモ）
+- 同時書き込み Feature（DB 防衛・Intent Q7）
 
 ## AI 駆動開発（事実）
 
-- キット `dg-aidlc` を配置し、Step 1–3 を questions 正本で承認（2026-07-23〜24）
-- Step 4 Red: 受入ケース表どおりの Domain Unit を先に書いた（2026-07-24）
-- 詳細は [`aidlc-docs/`](aidlc-docs/README.md) と [`decision-log.md`](aidlc-docs/decision-log.md)
+- DG-AIDLC キット配置。Step 1–3 は `*-questions.md` を正本として承認（2026-07-23〜24）
+- Inception で Reverse Engineering 済みのうえ Construction（Red → Green → Refactor）
+- Step 1 で AI 草案の Laravel 案を却下し素の PHP + Deptrac を選択
+- Step 4–7: 受入表どおり Red → Green → `make check` → decision-log / README で区切りを記録（2026-07-24）
+- 詳細: [`aidlc-docs/`](aidlc-docs/README.md)、[`decision-log.md`](aidlc-docs/decision-log.md)

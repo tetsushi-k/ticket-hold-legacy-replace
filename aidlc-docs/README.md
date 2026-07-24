@@ -6,11 +6,13 @@
 
 ## 読み順（面談・レビュー）
 
-1. 本 README → `decision-log.md`
-2. `inception/intent-approval-questions.md`（Step 1 正本）→ `intent.md` / `ubiquitous-language.md`
-3. `inception/intentional-debt-plan.md` → `legacy/`（Before）
-4. `inception/reverse-engineering/`（仕様復元・アンチパターン）
-5. Step 2–3（domain / acceptance）→ After 実装
+1. 本 README → [`decision-log.md`](decision-log.md)（Step 7 に Done 対応表あり）
+2. [`inception/intent-approval-questions.md`](inception/intent-approval-questions.md)（Step 1 正本）→ [`intent.md`](inception/intent.md) / [`ubiquitous-language.md`](inception/ubiquitous-language.md)
+3. [`inception/intentional-debt-plan.md`](inception/intentional-debt-plan.md) → [`legacy/`](../legacy/)（Before）
+4. [`inception/reverse-engineering/`](inception/reverse-engineering/)（仕様復元・アンチパターン）
+5. Step 2–3（[`domain/`](domain/) / [`construction/acceptance-criteria.md`](construction/acceptance-criteria.md)）
+6. After Domain: [`../src/Domain/`](../src/Domain/) + [`../tests/Unit/Domain/`](../tests/Unit/Domain/)（受入 1:1）
+7. 品質ゲート: ルート [`deptrac.yaml`](../deptrac.yaml) / [`phpstan.neon`](../phpstan.neon) → `make check`
 
 ## 承認の正本（フェーズごと）
 
@@ -26,15 +28,17 @@
 
 ## 現状（2026-07-24）
 
-| 文書 | 状態 |
-|------|------|
+| 文書 / 成果物 | 状態 |
+|---------------|------|
 | キット配置 | **済** |
 | Step 1 Intent | **承認済み**（2026-07-23 22:42 JST） |
 | レガシー Before（`legacy/`） | **動作確認済** |
 | Reverse Engineering | **済**（`spec-restored` / `anti-patterns` / `architecture`） |
 | Step 2 ドメイン | **承認済み**（2026-07-23 22:51 JST） |
 | Step 3 受入例示 | **承認済み**（2026-07-24 10:55 JST） |
-| After / Red–Green | **Red 済み**（17 ケース Unit）→ 次は Green |
+| Step 4–6 Red/Green/Refactor | **済**（Domain Unit 17 + `make check`） |
+| Step 7 ナラティブ | **済**（2026-07-24 12:03 JST） |
+| Application / Infrastructure | **未**（Intent Done 残り） |
 
 ## A 作品との役割分担
 
