@@ -1,0 +1,30 @@
+deptrac:
+  paths:
+    - ./src
+  layers:
+    - name: Domain
+      collectors:
+        - type: classLike
+          value: TicketHold\\Domain\\.*
+    - name: Application
+      collectors:
+        - type: classLike
+          value: TicketHold\\Application\\.*
+    - name: Infrastructure
+      collectors:
+        - type: classLike
+          value: TicketHold\\Infrastructure\\.*
+    - name: Presentation
+      collectors:
+        - type: classLike
+          value: TicketHold\\Presentation\\.*
+  ruleset:
+    Domain:
+    Application:
+      - Domain
+    Infrastructure:
+      - Domain
+      - Application
+    Presentation:
+      - Application
+      - Domain

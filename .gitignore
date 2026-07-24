@@ -1,6 +1,7 @@
 /vendor/
 /.phpunit.cache/
 /.phpunit.result.cache
+/.deptrac.cache
 /node_modules/
 .env
 .env.local

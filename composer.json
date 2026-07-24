@@ -7,6 +7,8 @@
         "php": "^8.3"
     },
     "require-dev": {
+        "deptrac/deptrac": "^3.0",
+        "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^11.0"
     },
     "autoload": {
@@ -20,6 +22,16 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "phpstan": "phpstan analyse -c phpstan.neon",
+        "deptrac": "deptrac analyse --config-file=deptrac.yaml",
+        "check": [
+            "@test",
+            "@phpstan",
+            "@deptrac"
+        ]
+    },
+    "config": {
+        "sort-packages": true
     }
 }

@@ -34,8 +34,9 @@
 
 ## 境界検証
 
-- Deptrac: Domain → FW / mysqli / HTTP 依存ゼロ
-- PHPStan（予定）
+- **Deptrac**（`deptrac.yaml`）: Domain → Application / Infrastructure / Presentation への逆流禁止
+- **PHPStan** level 6（`phpstan.neon`）: `src/` 静的解析
+- 実行: `make check`（test + phpstan + deptrac）
 
 ## 人間が確定した判断（Step 2）
 

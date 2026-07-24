@@ -1,4 +1,4 @@
-.PHONY: help setup up down logs ps reset-db composer-install test
+.PHONY: help setup up down logs ps reset-db composer-install test phpstan deptrac check
 
 help:
 	@echo ""
@@ -11,7 +11,10 @@ help:
 	@echo "  make logs             ログ"
 	@echo "  make ps               状態"
 	@echo "  make composer-install After 依存インストール"
-	@echo "  make test             PHPUnit（Domain Unit・Red/Green）"
+	@echo "  make test             PHPUnit"
+	@echo "  make phpstan          静的解析（src/）"
+	@echo "  make deptrac          レイヤ境界検証"
+	@echo "  make check            test + phpstan + deptrac"
 	@echo ""
 	@echo "Legacy UI: http://localhost:8080/"
 	@echo ""
@@ -20,7 +23,7 @@ setup: up
 	@echo ""
 	@echo "=== setup complete (legacy Before) ==="
 	@echo "Open http://localhost:8080/"
-	@echo "After tests: make composer-install && make test"
+	@echo "After: make composer-install && make check"
 
 up:
 	docker compose up -d --build db legacy
@@ -43,3 +46,11 @@ composer-install:
 
 test:
 	docker compose run --rm php vendor/bin/phpunit
+
+phpstan:
+	docker compose run --rm php vendor/bin/phpstan analyse -c phpstan.neon
+
+deptrac:
+	docker compose run --rm php vendor/bin/deptrac analyse --config-file=deptrac.yaml
+
+check: test phpstan deptrac

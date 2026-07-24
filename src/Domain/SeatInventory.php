@@ -6,9 +6,7 @@ namespace TicketHold\Domain;
 
 /**
  * 集約ルート: 1 公演 × 1 座席。
- *
- * ファクトリは Given 用の状態復元のみ。hold / confirm / releaseExpired / isAvailable
- * の業務ルールは Green で実装する（いまは Red）。
+ * 有効判定（期限切れ OnHold は無効）は Domain 内に閉じる。
  */
 final class SeatInventory
 {
@@ -17,7 +15,7 @@ final class SeatInventory
     private function __construct(
         private PerformanceId $performanceId,
         private SeatNo $seatNo,
-        private string $state,
+        private SeatReservationState $state,
         private ?BuyerId $buyerId,
         private ?\DateTimeImmutable $holdUntil,
     ) {
@@ -25,7 +23,7 @@ final class SeatInventory
 
     public static function available(PerformanceId $performanceId, SeatNo $seatNo): self
     {
-        return new self($performanceId, $seatNo, 'available', null, null);
+        return new self($performanceId, $seatNo, SeatReservationState::Available, null, null);
     }
 
     public static function onHold(
@@ -34,7 +32,7 @@ final class SeatInventory
         BuyerId $buyerId,
         \DateTimeImmutable $holdUntil,
     ): self {
-        return new self($performanceId, $seatNo, 'on_hold', $buyerId, $holdUntil);
+        return new self($performanceId, $seatNo, SeatReservationState::OnHold, $buyerId, $holdUntil);
     }
 
     public static function confirmed(
@@ -42,7 +40,7 @@ final class SeatInventory
         SeatNo $seatNo,
         BuyerId $buyerId,
     ): self {
-        return new self($performanceId, $seatNo, 'confirmed', $buyerId, null);
+        return new self($performanceId, $seatNo, SeatReservationState::Confirmed, $buyerId, null);
     }
 
     public function performanceId(): PerformanceId
@@ -57,17 +55,17 @@ final class SeatInventory
 
     public function isAvailableState(): bool
     {
-        return $this->state === 'available';
+        return $this->state === SeatReservationState::Available;
     }
 
     public function isOnHold(): bool
     {
-        return $this->state === 'on_hold';
+        return $this->state === SeatReservationState::OnHold;
     }
 
     public function isConfirmed(): bool
     {
-        return $this->state === 'confirmed';
+        return $this->state === SeatReservationState::Confirmed;
     }
 
     public function buyerId(): ?BuyerId
@@ -80,13 +78,23 @@ final class SeatInventory
         return $this->holdUntil;
     }
 
-    /** 状態比較用（「状態変わらず」の Then）。 */
+    /**
+     * 状態比較用（「状態変わらず」の Then）。
+     *
+     * @return array{
+     *     performanceId: string,
+     *     seatNo: string,
+     *     state: string,
+     *     buyerId: string|null,
+     *     holdUntil: string|null
+     * }
+     */
     public function snapshot(): array
     {
         return [
             'performanceId' => $this->performanceId->value,
             'seatNo' => $this->seatNo->value,
-            'state' => $this->state,
+            'state' => $this->state->value,
             'buyerId' => $this->buyerId?->value,
             'holdUntil' => $this->holdUntil?->format(\DateTimeInterface::ATOM),
         ];
@@ -94,22 +102,63 @@ final class SeatInventory
 
     public function hold(BuyerId $buyerId, \DateTimeImmutable $now): OperationResult
     {
-        throw new NotImplementedException('SeatInventory::hold');
+        if ($this->hasEffectiveReservation($now)) {
+            return OperationResult::rejected();
+        }
+
+        $this->state = SeatReservationState::OnHold;
+        $this->buyerId = $buyerId;
+        $this->holdUntil = $now->modify('+' . self::HOLD_TTL_MINUTES . ' minutes');
+
+        return OperationResult::ok();
     }
 
     public function confirm(BuyerId $buyerId, \DateTimeImmutable $now): OperationResult
     {
-        throw new NotImplementedException('SeatInventory::confirm');
+        if (!$this->hasValidHold($now)) {
+            return OperationResult::rejected();
+        }
+        if ($this->buyerId === null || !$this->buyerId->equals($buyerId)) {
+            return OperationResult::rejected();
+        }
+
+        $this->state = SeatReservationState::Confirmed;
+        $this->buyerId = $buyerId;
+        $this->holdUntil = null;
+
+        return OperationResult::ok();
     }
 
     public function releaseExpired(\DateTimeImmutable $now): OperationResult
     {
-        throw new NotImplementedException('SeatInventory::releaseExpired');
+        if (!$this->isOnHold() || $this->hasValidHold($now)) {
+            return OperationResult::rejected();
+        }
+
+        $this->state = SeatReservationState::Available;
+        $this->buyerId = null;
+        $this->holdUntil = null;
+
+        return OperationResult::ok();
     }
 
     /** 空き確認（Query）。副作用なし。判定は hold と同じ「有効確保が無いか」。 */
     public function isAvailable(\DateTimeImmutable $now): bool
     {
-        throw new NotImplementedException('SeatInventory::isAvailable');
+        return !$this->hasEffectiveReservation($now);
+    }
+
+    /** 有効な OnHold、または Confirmed。 */
+    private function hasEffectiveReservation(\DateTimeImmutable $now): bool
+    {
+        return $this->isConfirmed() || $this->hasValidHold($now);
+    }
+
+    /** 期限切れでない OnHold。 */
+    private function hasValidHold(\DateTimeImmutable $now): bool
+    {
+        return $this->isOnHold()
+            && $this->holdUntil !== null
+            && $this->holdUntil > $now;
     }
 }
