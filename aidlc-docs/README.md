@@ -11,7 +11,7 @@
 3. [`inception/intentional-debt-plan.md`](inception/intentional-debt-plan.md) → [`legacy/`](../legacy/)（Before）
 4. [`inception/reverse-engineering/`](inception/reverse-engineering/)（仕様復元・アンチパターン）
 5. Step 2–3（[`domain/`](domain/) / [`construction/acceptance-criteria.md`](construction/acceptance-criteria.md)）
-6. After Domain: [`../src/Domain/`](../src/Domain/) + [`../tests/Unit/Domain/`](../tests/Unit/Domain/)（受入 1:1）
+6. After: [`../src/Domain/`](../src/Domain/) + [`../tests/Unit/Domain/`](../tests/Unit/Domain/)（受入 1:1）→ [`../src/Application/`](../src/Application/) / [`../src/Infrastructure/`](../src/Infrastructure/) / [`../after/`](../after/)
 7. 品質ゲート: ルート [`deptrac.yaml`](../deptrac.yaml) / [`phpstan.neon`](../phpstan.neon) → `make check`
 
 ## 承認の正本（フェーズごと）
@@ -38,7 +38,9 @@
 | Step 3 受入例示 | **承認済み**（2026-07-24 10:55 JST） |
 | Step 4–6 Red/Green/Refactor | **済**（Domain Unit 17 + `make check`） |
 | Step 7 ナラティブ | **済**（2026-07-24 12:03 JST） |
-| Application / Infrastructure | **未**（Intent Done 残り） |
+| Application / Infrastructure / After 画面 | **済**（2026-07-24・8081・シード込み） |
+
+Intent Done の残り: 同時書き込み Feature（DB 防衛・Intent Q7）。対応表は [`decision-log.md`](decision-log.md)。
 
 ## A 作品との役割分担
 

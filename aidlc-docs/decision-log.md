@@ -76,4 +76,21 @@
 3. AI 草案の却下例: After を Laravel にする案（Step 1 Q11）
 4. レガシー D5（仮押さえ上書き）等は `anti-patterns.md` に観測済み → Domain の Q5 拒否で解消方向
 
-**次（v1 Done 残り）**: Application / Infrastructure / Seeder、`make setup` 直後の After デモ、同時書き込み Feature（DB 防衛）
+## v1 仕上げ: Application / Infrastructure / After 画面（2026-07-24）
+
+- **AI に任せた**: UseCase、MySQL 永続化、composition root（`after/`）、After 画面、After 用シード
+- **自分が判断**: Domain は非変更のまま Step 1–3 の正本に閉じ込める。画面は表示と入力に留め、判断ロジックを Presentation に置かない
+- **重かった / 迷った**: —
+
+### Intent Done との対応（2026-07-24・After 実装後）
+
+| # | 条件 | 状態 |
+|---|------|------|
+| 1 | Before / After 同一リポで比較 | **済** — `legacy/`（8080）と `after/` + `src/`（8081） |
+| 2 | スコープ 4 点を受入テストで証明 | **済** — Domain Unit 17 ケース |
+| 3 | decision-log に人間の核心判断 | **済** — Step 1 で Laravel 却下ほか |
+| 4 | `make setup` で主要動作再現 | **済** — After シード込み（既存ボリュームは `make reset-db`） |
+| 5 | README から起動・設計が読める | **済** |
+| 6 | Deptrac で Domain 境界証明 | **済** — `make deptrac` violations 0 |
+
+**次（v1 Done 残り）**: 同時書き込み Feature（DB 防衛・Intent Q7）
